@@ -1,5 +1,3 @@
-//import { UserAgentApplication } from 'msal'
-//import { msalConfig } from '../utils/authProvider'
 import Util from "../utils/Util"
 
 (() => {
@@ -19,9 +17,4 @@ import Util from "../utils/Util"
         })
         return
     }
-
-    // Only initialize msal if window is not callback (not popup).
-    // MSAL will pick up the hash and redirect - we don't want this.
-    //const msal = new UserAgentApplication(msalConfig)
-
 })()

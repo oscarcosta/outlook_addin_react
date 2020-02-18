@@ -104,7 +104,7 @@ export const doLoginHack = async (msal: UserAgentApplication, setState: (x: AppS
                                 //@ts-ignore
                                 dummy.location.href = dummy.location.hash = arg.message
                             })
-                            loginDialog.addEventHandler(Office.EventType.DialogEventReceived, (arg) =>{
+                            result.value.addEventHandler(Office.EventType.DialogEventReceived, (arg) =>{
                                 Util.log("displayDialogAsync DialogEventReceived")
                                 Util.log(arg)
 
