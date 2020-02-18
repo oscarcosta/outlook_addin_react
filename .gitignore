@@ -1,0 +1,10 @@
+# vs code
+.vscode
+
+# node
+node_modules
+dist
+package-lock.json
+
+# pm2
+service.json
