@@ -32,7 +32,7 @@ export const msalConfig: msal.Configuration = {
 }
 
 export const authParams: msal.AuthenticationParameters = {
-    scopes: ['email', 'offline_access', 'openid', 'profile', 'user.read', 'mail.read'],
+    scopes: ['email', 'openid', 'profile', 'user.read', 'mail.read'],
 }
 
 export enum AuthStatus {

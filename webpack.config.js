@@ -22,7 +22,8 @@ module.exports = async (env, options) => {
         './src/taskpane/index.tsx',
       ],
       //commands: './src/commands/commands.ts',
-      login: './src/login/login.tsx',
+      //login: './src/login/login.tsx',
+      login: './src/login/loginHack.tsx',
       logout: './src/logout/logout.tsx'
     },
     resolve: {

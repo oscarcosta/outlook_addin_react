@@ -1,4 +1,5 @@
-import { AuthStatus } from "./authProvider"
+import { UserAgentApplication } from 'msal'
+import { AuthStatus, authParams } from "./authProvider"
 import Util from './Util'
 
 /* LOGIN */
@@ -7,8 +8,7 @@ const dialogLoginUrl: string = window.location.origin + '/login.html'
 let loginDialog: Office.Dialog
 
 interface AppState {
-    authStatus?: AuthStatus,
-    headerMessage?: string
+    authStatus?: AuthStatus
 }
 
 /**
@@ -30,8 +30,7 @@ export const doLogin = async (setState: (x: AppState) => void, setToken: (x: str
             loginDialog.close()
             setToken(messageFromDialog.result)
             setState({
-                authStatus: AuthStatus.LOGGED_IN,
-                headerMessage: 'Get Data'
+                authStatus: AuthStatus.LOGGED_IN
             })
         } else {
             Util.log("processLoginMessage: dialog says error")
@@ -71,6 +70,58 @@ export const doLogin = async (setState: (x: AppState) => void, setToken: (x: str
     })
 }
 
+export const doLoginHack = async (msal: UserAgentApplication, setState: (x: AppState) => void, displayError: (x: string) => void) => {
+    Util.log("doLoginHack")
+
+    //@ts-ignore
+    msal.openPopup = () => {
+        Util.log("openPopup")
+
+        const dummy = {
+            close() {
+            },
+            location: {
+                assign(url) {
+                    Util.log("assign")
+                    Util.log(url)
+
+                    Office.context.ui.displayDialogAsync(url, { width: 25, height: 50 }, result => {
+                        Util.log("displayDialogAsync")
+                        
+                        if (result.status === Office.AsyncResultStatus.Failed) {
+                            Util.log("displayDialogAsync Failed")
+                            Util.log(result.error)
+                
+                            displayError(`${result.error.code} ${result.error.message}`)
+                        } else {
+                            Util.log("displayDialogAsync Succeeded")
+
+                            dummy.close = result.value.close
+                            result.value.addEventHandler(Office.EventType.DialogMessageReceived, (arg) => {
+                                Util.log("displayDialogAsync DialogMessageReceived")
+                                Util.log(arg)
+                                
+                                //@ts-ignore
+                                dummy.location.href = dummy.location.hash = arg.message
+                            })
+                            loginDialog.addEventHandler(Office.EventType.DialogEventReceived, (arg) =>{
+                                Util.log("displayDialogAsync DialogEventReceived")
+                                Util.log(arg)
+
+                                processDialogEvent(arg, setState, displayError)
+                            })
+                        }
+                    })
+                }
+            }
+        }
+        return dummy
+    }
+
+    Util.log('Logging in...')
+    await msal.loginPopup(authParams)
+}
+
 /* LOGOUT */
 
 const dialogLogoutUrl: string = window.location.origin + '/logout.html'
@@ -85,8 +136,7 @@ export const doLogout = async (setState: (x: AppState) => void, displayError: (x
 
         logoutDialog.close()
         setState({
-            authStatus: AuthStatus.NOT_LOGGED_IN,
-            headerMessage: 'Welcome'
+            authStatus: AuthStatus.NOT_LOGGED_IN
         })
     }
 
@@ -137,8 +187,7 @@ const processDialogEvent = (arg: any,
             // logged out and revert to the app's starting state. It does no harm for a user to
             // press the login button again even if the user is logged in.
             setState({
-                authStatus: AuthStatus.NOT_LOGGED_IN,
-                headerMessage: 'Welcome'
+                authStatus: AuthStatus.NOT_LOGGED_IN
             })
             break
         default:

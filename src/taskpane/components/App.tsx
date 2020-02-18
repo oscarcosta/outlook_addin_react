@@ -4,10 +4,9 @@ import * as msal from 'msal'
 import { Button, ButtonType, DefaultButton, Label, Stack } from "office-ui-fabric-react"
 import Util from "../../utils/Util"
 import Progress from "./Progress"
-import Header from "./Header"
 import OfficeAddinMessageBar from "./OfficeAddinMessageBar"
 import { msalConfig, authParams, AuthStatus } from "../../utils/authProvider"
-import { doLogin, doLogout } from "../../utils/authDialogHelper"
+import { doLogout, doLoginHack } from "../../utils/authDialogHelper"
 /* global Button, Header, HeroList, HeroListItem, Progress */
 
 export interface AppProps {
@@ -17,7 +16,6 @@ export interface AppProps {
 export interface AppState {
     title: string,
     authStatus?: AuthStatus,
-    headerMessage?: string,
     errorMessage?: string
 }
 
@@ -27,7 +25,6 @@ export default class App extends React.Component<AppProps, AppState> {
         this.state = {
             title: this.props.title,
             authStatus: AuthStatus.NOT_LOGGED_IN,
-            headerMessage: 'Welcome',
             errorMessage: ''
         }
 
@@ -68,7 +65,19 @@ export default class App extends React.Component<AppProps, AppState> {
 
     login = async () => {
         Util.log("login")
-        await doLogin(this.boundSetState, this.setToken, this.displayError)
+        //await doLogin(this.boundSetState, this.setToken, this.displayError)
+        await doLoginHack(this.msalApp, this.boundSetState, this.displayError)
+        const account = this.msalApp.getAccount()
+        if (account) {
+            Util.log("account")
+            Util.log(account)
+            
+            const token = await this.msalApp.acquireTokenSilent(authParams)
+            this.setToken(token.accessToken)
+            this.setState({
+                authStatus: AuthStatus.LOGGED_IN
+            })
+        }
     }
 
     logout = async () => {
@@ -94,8 +103,6 @@ export default class App extends React.Component<AppProps, AppState> {
     }
 
     render() {
-
-        const { title, headerMessage } = this.state
 
         let body
 
@@ -128,7 +135,6 @@ export default class App extends React.Component<AppProps, AppState> {
                 {this.state.errorMessage ?
                     (<OfficeAddinMessageBar onDismiss={this.errorDismissed} message={this.state.errorMessage + ' '} />)
                     : null}
-                <Header logo='assets/logo-filled.png' title={title} message={headerMessage} />
                 {body}
             </div>
         )

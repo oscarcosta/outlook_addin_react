@@ -15,7 +15,7 @@
   <SupportUrl DefaultValue="https://addin.oscarcosta.dev/"/>
   
   <AppDomains>
-    <AppDomain>addin.oscarcosta.dev</AppDomain>
+    <AppDomain>https://addin.oscarcosta.dev</AppDomain>
     <AppDomain>https://login.windows.net</AppDomain>
     <AppDomain>https://login.microsoftonline.com</AppDomain>
   </AppDomains>
@@ -54,7 +54,7 @@
     <Hosts>
       <Host xsi:type="MailHost">
         <DesktopFormFactor>
-          <FunctionFile resid="Commands.Url"/>
+          <!--FunctionFile resid="Commands.Url"/-->
           <ExtensionPoint xsi:type="MessageReadCommandSurface">
             <OfficeTab id="TabDefault">
               <Group id="msgReadGroup">
@@ -74,7 +74,7 @@
                     <SourceLocation resid="Taskpane.Url"/>
                   </Action>
                 </Control>
-                <Control xsi:type="Button" id="ActionButton">
+                <!--Control xsi:type="Button" id="ActionButton">
                   <Label resid="ActionButton.Label"/>
                   <Supertip>
                     <Title resid="ActionButton.Label"/>
@@ -88,7 +88,7 @@
                   <Action xsi:type="ExecuteFunction">
                     <FunctionName>action</FunctionName>
                   </Action>
-                </Control>
+                </Control-->
               </Group>
             </OfficeTab>
           </ExtensionPoint>
@@ -106,17 +106,17 @@
         <bt:Image id="Icon.80x80" DefaultValue="https://addin.oscarcosta.dev/assets/icon-80.png"/>
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="Commands.Url" DefaultValue="https://addin.oscarcosta.dev/commands.html"/>
+        <!--bt:Url id="Commands.Url" DefaultValue="https://addin.oscarcosta.dev/commands.html"/-->
         <bt:Url id="Taskpane.Url" DefaultValue="https://addin.oscarcosta.dev/taskpane.html"/>
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="GroupLabel" DefaultValue="My Addin"/>
         <bt:String id="TaskpaneButton.Label" DefaultValue="Show Taskpane"/>
-        <bt:String id="ActionButton.Label" DefaultValue="Perform an action"/>
+        <!--bt:String id="ActionButton.Label" DefaultValue="Perform an action"/-->
       </bt:ShortStrings>
       <bt:LongStrings>
         <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Opens a pane displaying all available properties."/>
-        <bt:String id="ActionButton.Tooltip" DefaultValue="Perform an action when clicked."/>
+        <!--bt:String id="ActionButton.Tooltip" DefaultValue="Perform an action when clicked."/-->
       </bt:LongStrings>
     </Resources>
 
@@ -130,7 +130,7 @@
       <Hosts>
         <Host xsi:type="MailHost">
           <DesktopFormFactor>
-            <FunctionFile resid="Commands.Url"/>
+            <!--FunctionFile resid="Commands.Url"/-->
             <ExtensionPoint xsi:type="MessageReadCommandSurface">
               <OfficeTab id="TabDefault">
                 <Group id="msgReadGroup">
@@ -150,7 +150,7 @@
                       <SourceLocation resid="Taskpane.Url"/>
                     </Action>
                   </Control>
-                  <Control xsi:type="Button" id="ActionButton">
+                  <!--Control xsi:type="Button" id="ActionButton">
                     <Label resid="ActionButton.Label"/>
                     <Supertip>
                       <Title resid="ActionButton.Label"/>
@@ -164,14 +164,14 @@
                     <Action xsi:type="ExecuteFunction">
                       <FunctionName>action</FunctionName>
                     </Action>
-                  </Control>
+                  </Control-->
                 </Group>
               </OfficeTab>
             </ExtensionPoint>
           </DesktopFormFactor>
 
           <MobileFormFactor>
-            <FunctionFile resid="Commands.Url" />
+            <!--FunctionFile resid="Commands.Url" /-->
             <ExtensionPoint xsi:type="MobileMessageReadCommandSurface">
               <Group id="MobileMsgReadGroup">
                 <Label resid="GroupLabel" />
@@ -208,17 +208,17 @@
           <bt:Image id="Icon.80x80" DefaultValue="https://addin.oscarcosta.dev/assets/icon-80.png"/>
         </bt:Images>
         <bt:Urls>
-          <bt:Url id="Commands.Url" DefaultValue="https://addin.oscarcosta.dev/commands.html"/>
+          <!--bt:Url id="Commands.Url" DefaultValue="https://addin.oscarcosta.dev/commands.html"/-->
           <bt:Url id="Taskpane.Url" DefaultValue="https://addin.oscarcosta.dev/taskpane.html"/>
         </bt:Urls>
         <bt:ShortStrings>
           <bt:String id="GroupLabel" DefaultValue="My Addin"/>
           <bt:String id="TaskpaneButton.Label" DefaultValue="Show Taskpane"/>
-          <bt:String id="ActionButton.Label" DefaultValue="Perform an action"/>
+          <!--bt:String id="ActionButton.Label" DefaultValue="Perform an action"/-->
         </bt:ShortStrings>
         <bt:LongStrings>
           <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Opens a pane displaying all available properties."/>
-          <bt:String id="ActionButton.Tooltip" DefaultValue="Perform an action when clicked."/>
+          <!--bt:String id="ActionButton.Tooltip" DefaultValue="Perform an action when clicked."/-->
         </bt:LongStrings>
       </Resources>
 
@@ -226,6 +226,9 @@
           <Id>dc6e0f7d-2d1b-42aa-acc1-960d35e29617</Id>
           <Resource>api://addin.oscarcosta.dev/dc6e0f7d-2d1b-42aa-acc1-960d35e29617</Resource>
           <Scopes>
+            <Scope>email</Scope>
+            <Scope>openid</Scope>
+            <Scope>profile</Scope>
             <Scope>User.Read</Scope>
             <Scope>Mail.Read</Scope>
           </Scopes>
